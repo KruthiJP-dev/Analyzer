@@ -1,4 +1,4 @@
-import { GoogleGenAI, Type } from "@google/genai";
+import { GoogleGenAI } from "@google/genai";
 import type { AnalysisReport } from '../types';
 
 if (!process.env.API_KEY) {
@@ -7,61 +7,7 @@ if (!process.env.API_KEY) {
 
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
-const SYSTEM_INSTRUCTION = `You are a world-class senior product designer and UI/UX expert. Your task is to analyze a given website URL and provide a comprehensive, structured breakdown of its product design in a strict JSON format that adheres to the provided schema. Do not include any markdown formatting or explanatory text outside of the JSON structure. Be professional, insightful, and constructive.`;
-
-const responseSchema = {
-    type: Type.OBJECT,
-    properties: {
-        overview: { type: Type.STRING, description: 'A one-paragraph overview of the site\'s design philosophy.' },
-        colorPalette: {
-            type: Type.OBJECT,
-            properties: {
-                primary: { type: Type.ARRAY, description: "Primary brand colors.", items: { type: Type.OBJECT, properties: { hex: { type: Type.STRING }, name: { type: Type.STRING } }, required: ['hex', 'name'] } },
-                secondary: { type: Type.ARRAY, description: "Secondary brand colors.", items: { type: Type.OBJECT, properties: { hex: { type: Type.STRING }, name: { type: Type.STRING } }, required: ['hex', 'name'] } },
-                accent: { type: Type.ARRAY, description: "Accent colors for CTAs or highlights.", items: { type: Type.OBJECT, properties: { hex: { type: Type.STRING }, name: { type: Type.STRING } }, required: ['hex', 'name'] } }
-            },
-            required: ['primary', 'secondary', 'accent']
-        },
-        typography: {
-            type: Type.OBJECT,
-            properties: {
-                heading: { type: Type.OBJECT, properties: { fontFamily: { type: Type.STRING }, fontWeight: { type: Type.STRING }, exampleText: { type: Type.STRING, description: "Example text for a heading." } }, required: ['fontFamily', 'fontWeight', 'exampleText'] },
-                body: { type: Type.OBJECT, properties: { fontFamily: { type: Type.STRING }, fontWeight: { type: Type.STRING }, exampleText: { type: Type.STRING, description: "Example text for body copy." } }, required: ['fontFamily', 'fontWeight', 'exampleText'] }
-            },
-            required: ['heading', 'body']
-        },
-        layout: {
-            type: Type.OBJECT,
-            properties: {
-                type: { type: Type.STRING, description: "e.g., Grid-based, Minimalist, Single-column" },
-                description: { type: Type.STRING, description: "A brief description of the layout and information architecture." }
-            },
-            required: ['type', 'description']
-        },
-        uiComponents: {
-            type: Type.ARRAY,
-            description: "List of 3-5 notable UI components.",
-            items: {
-                type: Type.OBJECT,
-                properties: {
-                    name: { type: Type.STRING, description: "e.g., Primary Button, Navigation Bar" },
-                    description: { type: Type.STRING, description: "Brief analysis of the component's design." }
-                },
-                required: ['name', 'description']
-            }
-        },
-        uxAnalysis: {
-            type: Type.OBJECT,
-            properties: {
-                strengths: { type: Type.ARRAY, description: "Bulleted list of 3-5 key design strengths.", items: { type: Type.STRING } },
-                improvements: { type: Type.ARRAY, description: "Bulleted list of 3-5 potential areas for improvement.", items: { type: Type.STRING } }
-            },
-            required: ['strengths', 'improvements']
-        }
-    },
-    required: ['overview', 'colorPalette', 'typography', 'layout', 'uiComponents', 'uxAnalysis']
-};
-
+const SYSTEM_INSTRUCTION = `You are a world-class senior product designer and UI/UX expert. Your task is to analyze a given website URL and provide a comprehensive, structured breakdown of its product design. Your response MUST be a single, valid JSON object and nothing else. Do not wrap it in markdown (e.g. \`\`\`json) or add any commentary. The JSON object must contain keys for 'overview', 'colorPalette', 'typography', 'layout', 'uiComponents', 'uxAnalysis', and 'componentTree'. For each color, estimate its prominence on the page as a percentage (0-100). For each UI component, you must provide a 'description' (its function) and a 'designInsight' (actionable feedback on its design, usability, or accessibility, suggesting improvements or best practices). Also generate a detailed, professional-quality, single-color SVG line icon that visually represents the component (e.g., for a 'Search Bar', an SVG of a magnifying glass). The SVG must use 'currentColor' for its stroke/fill, have a viewBox='0 0 24 24', and must not include fixed width/height attributes to ensure it's scalable. The 'componentTree' key should contain a nested object representing the high-level component hierarchy (e.g., Root > Header > [Logo, Navigation]). Each node in the tree must have 'name', 'svgIcon', and 'children' properties. Be professional, insightful, and constructive.`;
 
 export const analyzeUrlWithGemini = async (url: string): Promise<AnalysisReport> => {
   try {
@@ -73,8 +19,6 @@ export const analyzeUrlWithGemini = async (url: string): Promise<AnalysisReport>
       config: {
         systemInstruction: SYSTEM_INSTRUCTION,
         tools: [{googleSearch: {}}],
-        responseMimeType: "application/json",
-        responseSchema: responseSchema,
       },
     });
 

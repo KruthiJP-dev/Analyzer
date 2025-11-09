@@ -25,19 +25,19 @@ export const ColorPaletteDisplay: React.FC<ColorPaletteDisplayProps> = ({ palett
       <div>
         <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Primary</h3>
         <div className="flex flex-wrap gap-4">
-          {palette.primary.map(color => <ColorSwatch key={color.hex} {...color} />)}
+          {(palette?.primary || []).map(color => <ColorSwatch key={color.hex} {...color} />)}
         </div>
       </div>
        <div>
         <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Secondary</h3>
         <div className="flex flex-wrap gap-4">
-          {palette.secondary.map(color => <ColorSwatch key={color.hex} {...color} />)}
+          {(palette?.secondary || []).map(color => <ColorSwatch key={color.hex} {...color} />)}
         </div>
       </div>
        <div>
         <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Accent</h3>
         <div className="flex flex-wrap gap-4">
-          {palette.accent.map(color => <ColorSwatch key={color.hex} {...color} />)}
+          {(palette?.accent || []).map(color => <ColorSwatch key={color.hex} {...color} />)}
         </div>
       </div>
     </div>

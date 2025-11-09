@@ -22,10 +22,17 @@ const FontDisplay: React.FC<{ title: string, font: FontInfo }> = ({ title, font 
 
 
 export const TypographyDisplay: React.FC<TypographyDisplayProps> = ({ typography }) => {
+  const headingFont = typography?.heading;
+  const bodyFont = typography?.body;
+
+  if (!headingFont && !bodyFont) {
+    return <p className="text-gray-400">Typography information not available.</p>;
+  }
+  
   return (
     <div className="space-y-4">
-       <FontDisplay title="Heading" font={typography.heading} />
-       <FontDisplay title="Body" font={typography.body} />
+       {headingFont && <FontDisplay title="Heading" font={headingFont} />}
+       {bodyFont && <FontDisplay title="Body" font={bodyFont} />}
     </div>
   );
 };

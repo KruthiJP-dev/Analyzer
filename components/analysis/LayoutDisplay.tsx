@@ -6,6 +6,9 @@ interface LayoutDisplayProps {
 }
 
 export const LayoutDisplay: React.FC<LayoutDisplayProps> = ({ layout }) => {
+  if (!layout?.type || !layout?.description) {
+    return <p className="text-gray-400">Layout information not available.</p>;
+  }
   return (
     <div className="space-y-2">
       <p className="text-purple-400 font-semibold bg-purple-900/30 rounded-full px-3 py-1 text-sm inline-block">{layout.type}</p>

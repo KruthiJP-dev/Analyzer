@@ -6,6 +6,7 @@ interface UXAnalysisDisplayProps {
 }
 
 const CheckCircleIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+    // FIX: Corrected the malformed viewBox attribute from '0 0 24" 24"' to '0 0 24 24'.
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
         <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/>
     </svg>
@@ -26,7 +27,7 @@ export const UXAnalysisDisplay: React.FC<UXAnalysisDisplayProps> = ({ ux }) => {
             Strengths
         </h3>
         <ul className="space-y-2 list-disc list-inside text-gray-300">
-          {ux.strengths.map((item, index) => <li key={index}>{item}</li>)}
+          {(ux?.strengths || []).map((item, index) => <li key={index}>{item}</li>)}
         </ul>
       </div>
       <div>
@@ -35,7 +36,7 @@ export const UXAnalysisDisplay: React.FC<UXAnalysisDisplayProps> = ({ ux }) => {
             Areas for Improvement
         </h3>
         <ul className="space-y-2 list-disc list-inside text-gray-300">
-          {ux.improvements.map((item, index) => <li key={index}>{item}</li>)}
+          {(ux?.improvements || []).map((item, index) => <li key={index}>{item}</li>)}
         </ul>
       </div>
     </div>

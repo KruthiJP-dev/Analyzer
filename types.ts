@@ -1,6 +1,7 @@
 export interface ColorInfo {
   hex: string;
   name: string;
+  prominence: number;
 }
 
 export interface FontInfo {
@@ -12,6 +13,14 @@ export interface FontInfo {
 export interface UIComponentInfo {
   name: string;
   description: string;
+  svgIcon: string;
+  designInsight: string;
+}
+
+export interface ComponentNode {
+  name: string;
+  svgIcon: string;
+  children: ComponentNode[];
 }
 
 export interface AnalysisReport {
@@ -34,4 +43,5 @@ export interface AnalysisReport {
     strengths: string[];
     improvements: string[];
   };
+  componentTree: ComponentNode;
 }
