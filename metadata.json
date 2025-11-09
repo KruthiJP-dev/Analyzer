@@ -1,0 +1,5 @@
+{
+  "name": "AI Web Design Analyzer",
+  "description": "An application that uses Gemini to analyze the product design of any website. Provide a URL to generate a comprehensive report on its UI/UX, color palette, typography, and more.",
+  "requestFramePermissions": []
+}
